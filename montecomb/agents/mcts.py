@@ -103,10 +103,9 @@ class MCTSAgent:
         :param reward: reward obtained from the rollout
         """
         mcts_state = self
-        total_reward = reward
         while mcts_state.parent is not None:
-            total_reward = mcts_state.parent[2] + self._HYPER_PARAM_DISCOUNT_FACTOR * total_reward
-            mcts_state.update_q(total_reward, mcts_state.parent[1])
+            reward = mcts_state.parent[2] + self._HYPER_PARAM_DISCOUNT_FACTOR * reward
+            mcts_state.parent[0].update_q(reward, mcts_state.parent[1])
             mcts_state = mcts_state.parent[0]
 
     def search(self, n_mcts) -> None:
@@ -137,7 +136,7 @@ class MCTSAgent:
             while True:
                 progress_bar.update(1)
                 progress_bar.set_postfix(value=mcts_agent.value)
-                mcts_agent.search(100)
+                mcts_agent.search(1000)
                 move = mcts_agent.select()
                 if move is None:
                     progress_bar.close()
