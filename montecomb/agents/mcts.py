@@ -20,9 +20,9 @@ class MCTSAgent:
 
     def __init__(
         self,
-        value: int,
         num_actions: int,
         evaluator: 'MetaDataset',
+        value: int = 0,
         parent: ty.Optional[tuple['MCTSAgent', int, float]] = None,
     ):
         """Initialize a new state object.
@@ -81,9 +81,9 @@ class MCTSAgent:
         """
         next_state, next_reward = self.evaluator.step(self.value, action_index)
         self.child_states[action_index] = MCTSAgent(
-            value=next_state,
             num_actions=len(self.n_value),
             evaluator=self.evaluator,
+            value=next_state,
             parent=(self, action_index, next_reward)
         )
         mcts_state = self.child_states[action_index]

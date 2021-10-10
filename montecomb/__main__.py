@@ -1,12 +1,12 @@
-import numpy as np
-
 from .dataset.subset_additions import SubsetAdditionDatasets
 from .agents.mcts import MCTSAgent
-
+from .agents.random import RandomAgent
+from .agents.full import FullSearchAgent
+from .agents.lipschitz import LipschitzSamplerAgent
 
 if __name__ == "__main__":
-    df = SubsetAdditionDatasets(10)
-    mcts = MCTSAgent(0, df.n, df)
-    result = mcts.act()
-    print(f"Chosen action {result} with reward {df(result)}.")
-    print(f"Best reward was {np.max([df(val) for val in range(2 ** df.n)])}")
+    df = SubsetAdditionDatasets(20)
+    for cls in [MCTSAgent, RandomAgent, FullSearchAgent, LipschitzSamplerAgent]:
+        agent = cls(df.n, df)
+        result = agent.act()
+        print(f"{cls.__name__}: chose action {result} with reward {df(result)}", flush=True)
