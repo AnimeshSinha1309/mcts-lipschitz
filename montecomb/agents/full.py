@@ -12,7 +12,7 @@ class FullSearchAgent:
     def __init__(
         self,
         num_actions: int,
-        evaluator: 'MetaDataset',
+        evaluator: "MetaDataset",
     ):
         """Initialize a new full searcher object.
         This initializes an agent which will try out all the different

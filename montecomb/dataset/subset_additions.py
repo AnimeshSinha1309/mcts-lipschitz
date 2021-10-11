@@ -3,7 +3,7 @@ import numpy as np
 from .meta_dataset import MetaDataset
 
 
-class SubsetAdditionDatasets(MetaDataset):
+class SubsetAdditionDataset(MetaDataset):
     def __init__(self, n: int = 10):
         self.n = n
         self.rewards = {

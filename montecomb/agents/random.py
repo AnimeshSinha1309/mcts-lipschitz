@@ -12,7 +12,7 @@ class RandomAgent:
     def __init__(
         self,
         num_actions: int,
-        evaluator: 'MetaDataset',
+        evaluator: "MetaDataset",
     ):
         """Initialize a new random searcher object.
         This initializes an agent which will randomly try out different

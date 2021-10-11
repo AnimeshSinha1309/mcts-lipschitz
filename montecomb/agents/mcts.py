@@ -21,9 +21,9 @@ class MCTSAgent:
     def __init__(
         self,
         num_actions: int,
-        evaluator: 'MetaDataset',
+        evaluator: "MetaDataset",
         value: int = 0,
-        parent: ty.Optional[tuple['MCTSAgent', int, float]] = None,
+        parent: ty.Optional[tuple["MCTSAgent", int, float]] = None,
     ):
         """Initialize a new state object.
         This state object will have a visit counter and a mean reward estimate for
@@ -45,7 +45,9 @@ class MCTSAgent:
                 self.w_value[i] = -1e8
                 self.n_value[i] = 1e8
         # noinspection PyTypeChecker
-        self.child_states: list[ty.Optional['MCTSAgent']] = [None for _ in range(num_actions)]
+        self.child_states: list[ty.Optional["MCTSAgent"]] = [
+            None for _ in range(num_actions)
+        ]
         self.parent = parent
 
     def update_q(self, reward, index):
@@ -74,7 +76,7 @@ class MCTSAgent:
         winner: int = np.random.choice(best_move_indices)
         return winner
 
-    def expand(self, action_index: int) -> 'MCTSAgent':
+    def expand(self, action_index: int) -> "MCTSAgent":
         """Expand the nodes given the action
         :param action_index: The action from current node which should lead to expansion
         :returns: The new node in the MCTS object
@@ -84,7 +86,7 @@ class MCTSAgent:
             num_actions=len(self.n_value),
             evaluator=self.evaluator,
             value=next_state,
-            parent=(self, action_index, next_reward)
+            parent=(self, action_index, next_reward),
         )
         mcts_state = self.child_states[action_index]
         return mcts_state
