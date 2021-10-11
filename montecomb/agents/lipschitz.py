@@ -1,6 +1,7 @@
 """The idea of implementing MCTS inspired from the Lipschitz bandit problem"""
 import typing as ty
 import numpy as np
+import tqdm.auto as tqdm
 
 from ..dataset.meta_dataset import MetaDataset
 
@@ -41,7 +42,7 @@ class LipschitzSamplerAgent:
         :param x: The state to be evaluated
         :return: The value of the evaluation
         """
-        if x in self.cached_evaluations:
+        if x not in self.cached_evaluations:
             self.cached_evaluations[x] = self.evaluator(x)
         return self.cached_evaluations[x]
 
@@ -94,12 +95,11 @@ class LipschitzSamplerAgent:
         :param _n_trials: Dummy variable
         """
         samples = [0]
-        for sample_radius, sample_reduce_to in [
-            (self.num_actions, 4),
-            (4, 3),
-            (4, 2),
+        for sample_radius, sample_reduce_to in tqdm.tqdm([
+            (self.num_actions, 5),
+            (5, 3),
             (3, 1),
-        ]:
+        ]):
             samples = self._generate_neighborhood(
                 samples, sample_radius, sample_reduce_to
             )
