@@ -11,10 +11,17 @@ from .loggers.counter import FunctionCallCounter
 
 if __name__ == "__main__":
     metrics = [FunctionCallCounter()]
-    df = LocalEffectsDataset(13, 4, metrics)
-    for cls in [BiasingSamplerAgent, MCTSAgent, RandomAgent, FullSearchAgent]:
-        agent = cls(df.n, df)
-        result = agent.act()
-        print(f"{cls.__name__}: chose action {result} with reward {df(result)} with {metrics[0].count} calls.")
-        metrics[0].reset()
-        time.sleep(0.1)
+    for df in [LocalEffectsDataset(13, 4, metrics), SubsetAdditionDataset(13, metrics)]:
+        print(
+            f"Evaluating on {df.__class__.__name__}"
+            f"--------------{len(df.__class__.__name__) * '-'}"
+        )
+        for cls in [BiasingSamplerAgent, MCTSAgent, RandomAgent, FullSearchAgent]:
+            agent = cls(df.n, df)
+            result = agent.act()
+            print(
+                f"{cls.__name__}: chose action {result} with reward {df(result)}"
+                f" with {metrics[0].count} calls."
+            )
+            metrics[0].reset()
+            time.sleep(0.1)

@@ -1,7 +1,5 @@
-"""
-Monte Carlo Tree Search for asymmetric trees
-CREDITS: Thomas Moerland, Delft University of Technology
-"""
+"""Implements Monte Carlo Tree Search over all possible subsets"""
+
 import typing as ty
 
 import numpy as np
@@ -21,7 +19,7 @@ class MCTSAgent:
     def __init__(
         self,
         num_actions: int,
-        evaluator: "MetaDataset",
+        evaluator: MetaDataset,
         value: int = 0,
         parent: ty.Optional[tuple["MCTSAgent", int, float]] = None,
     ):
@@ -54,7 +52,8 @@ class MCTSAgent:
         """Updates the q-value for the state
         n_value is the number of times a node visited
         q_value is the q function
-        n += 1, w += reward, q = w / n -> this is being implicitly computed using the weighted average
+        n += 1, w += reward, q = w / n -> this is being implicitly computed
+        using the weighted average
         :param reward: The obtained total reward from this state
         :param index: The index of the action chosen for which the reward was provided
         """
@@ -89,7 +88,7 @@ class MCTSAgent:
             parent=(self, action_index, next_reward),
         )
         mcts_state = self.child_states[action_index]
-        return mcts_state
+        return ty.cast(MCTSAgent, mcts_state)
 
     def rollout(self, _num_rollouts=0):
         """Performs a random rollout
@@ -117,11 +116,13 @@ class MCTSAgent:
         for _ in range(n_mcts):
             mcts_state = self
             while True:
-                action_index: int = mcts_state.select()
+                action_index: ty.Optional[int] = mcts_state.select()
                 if action_index is None:
                     break
                 elif mcts_state.child_states[action_index] is not None:
-                    mcts_state = mcts_state.child_states[action_index]
+                    mcts_state = ty.cast(
+                        MCTSAgent, mcts_state.child_states[action_index]
+                    )
                 else:
                     mcts_state = mcts_state.expand(action_index)
                     break
@@ -143,4 +144,5 @@ class MCTSAgent:
                 if move is None:
                     progress_bar.close()
                     return mcts_agent.value
-                mcts_agent = mcts_agent.child_states[move]
+                assert mcts_agent.child_states[move] is not None
+                mcts_agent = ty.cast(MCTSAgent, mcts_agent.child_states[move])

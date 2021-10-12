@@ -1,6 +1,4 @@
-"""
-Random Agent that just tries out random actions and takes the best one
-"""
+"""Random Agent that just tries out random actions and takes the best one"""
 import numpy as np
 
 from ..dataset.meta_dataset import MetaDataset
@@ -12,7 +10,7 @@ class RandomAgent:
     def __init__(
         self,
         num_actions: int,
-        evaluator: "MetaDataset",
+        evaluator: MetaDataset,
     ):
         """Initialize a new random searcher object.
         This initializes an agent which will randomly try out different
@@ -22,7 +20,8 @@ class RandomAgent:
         """
         self.evaluator = evaluator
         self.num_actions = num_actions
-        self.best_state, self.best_reward = 0, 0
+        self.best_state: int = 0
+        self.best_reward: float = 0.0
 
     def search(self, n_trials) -> None:
         """Perform the random search for best value

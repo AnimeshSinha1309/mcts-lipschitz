@@ -14,7 +14,7 @@ class BiasingSamplerAgent:
     def __init__(
         self,
         num_actions: int,
-        evaluator: "MetaDataset",
+        evaluator: MetaDataset,
     ):
         """Initialize a new lipschitz sampler object.
         This maintains the mean rewards of all the clusters and their variances,
@@ -25,8 +25,9 @@ class BiasingSamplerAgent:
         """
         self.evaluator = evaluator
         self.num_actions = num_actions
-        self.best_state, self.best_value = 0, 0
-        self.cached_evaluations = {}
+        self.best_state: int = 0
+        self.best_reward: float = 0.0
+        self.cached_evaluations: ty.Dict[int, float] = {}
 
     @staticmethod
     def distance(n1: int, n2: int) -> int:
@@ -58,14 +59,14 @@ class BiasingSamplerAgent:
         :return: the generated samples
         """
         # Generate the set to sample from
-        neighborhood = set()
+        neighborhood_as_set = set()
         for start_value in start_values:
             for i in range(2 ** self.num_actions):
                 if self.distance(i, start_value) <= max_distance:
-                    neighborhood.add(i)
-        neighborhood = list(neighborhood)
+                    neighborhood_as_set.add(i)
+        neighborhood = list(neighborhood_as_set)
         # Generate the actual samples
-        samples = []
+        samples: ty.List[int] = []
         while len(neighborhood) > 0:
             result = np.random.choice(neighborhood)
             is_already_sampled = False
@@ -95,18 +96,20 @@ class BiasingSamplerAgent:
         :param _n_trials: Dummy variable
         """
         samples = [0]
-        for sample_radius, sample_reduce_to in tqdm.tqdm([
-            (self.num_actions, self.num_actions // 2),
-            (self.num_actions // 2, 3),
-            (3, 1),
-        ]):
+        for sample_radius, sample_reduce_to in tqdm.tqdm(
+            [
+                (self.num_actions, self.num_actions // 2),
+                (self.num_actions // 2, 3),
+                (3, 1),
+            ]
+        ):
             samples = self._generate_neighborhood(
                 samples, sample_radius, sample_reduce_to
             )
             states, values = self._run_selection_round(samples)
-            if values[0] > self.best_value:
+            if values[0] > self.best_reward:
                 self.best_state = states[0]
-                self.best_value = values[0]
+                self.best_reward = values[0]
             samples = states[:3]
 
     def act(self) -> int:
