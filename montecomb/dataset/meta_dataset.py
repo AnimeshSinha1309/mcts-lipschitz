@@ -1,5 +1,7 @@
 import abc
 
+import typing as ty
+
 
 class MetaDataset(abc.ABC):
     @abc.abstractmethod
@@ -7,5 +9,5 @@ class MetaDataset(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def step(self, state: int, action: int) -> tuple[int, float]:
+    def step(self, state: int, action: int) -> ty.Tuple[int, float]:
         raise NotImplementedError

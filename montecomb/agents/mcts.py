@@ -21,7 +21,7 @@ class MCTSAgent:
         num_actions: int,
         evaluator: MetaDataset,
         value: int = 0,
-        parent: ty.Optional[tuple["MCTSAgent", int, float]] = None,
+        parent: ty.Optional[ty.Tuple["MCTSAgent", int, float]] = None,
     ):
         """Initialize a new state object.
         This state object will have a visit counter and a mean reward estimate for
@@ -43,7 +43,7 @@ class MCTSAgent:
                 self.w_value[i] = -1e8
                 self.n_value[i] = 1e8
         # noinspection PyTypeChecker
-        self.child_states: list[ty.Optional["MCTSAgent"]] = [
+        self.child_states: ty.List[ty.Optional["MCTSAgent"]] = [
             None for _ in range(num_actions)
         ]
         self.parent = parent
