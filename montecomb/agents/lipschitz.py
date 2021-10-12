@@ -6,7 +6,7 @@ import tqdm.auto as tqdm
 from ..dataset.meta_dataset import MetaDataset
 
 
-class LipschitzSamplerAgent:
+class BiasingSamplerAgent:
     """A lipschitz sample agent for evaluating the combination of moves
     Uses adaptive discretization for avoiding normal MCTS.
     """
@@ -35,7 +35,7 @@ class LipschitzSamplerAgent:
         :param n2: One of the two elements to find the distance between
         :return: The edit distance
         """
-        return np.sum([i == "1" for i in bin(n1 ^ n2)])
+        return sum([i == "1" for i in bin(n1 ^ n2)])
 
     def cached_evaluator(self, x: int) -> float:
         """Caches results from evaluator so the redundant queries don't get sent in
@@ -96,8 +96,8 @@ class LipschitzSamplerAgent:
         """
         samples = [0]
         for sample_radius, sample_reduce_to in tqdm.tqdm([
-            (self.num_actions, 5),
-            (5, 3),
+            (self.num_actions, self.num_actions // 2),
+            (self.num_actions // 2, 3),
             (3, 1),
         ]):
             samples = self._generate_neighborhood(
@@ -107,7 +107,7 @@ class LipschitzSamplerAgent:
             if values[0] > self.best_value:
                 self.best_state = states[0]
                 self.best_value = values[0]
-            samples = states[:5]
+            samples = states[:3]
 
     def act(self) -> int:
         """Searches and returns the best result
