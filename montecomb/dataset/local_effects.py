@@ -6,8 +6,15 @@ from .subset_additions import SubsetAdditionDataset
 
 
 class LocalEffectsDataset(SubsetAdditionDataset):
-    def __init__(self, n: int = 10, local_radius: int = 4, metrics: ty.List = None):
-        super().__init__(n, metrics)
+    def __init__(
+        self,
+        n: int = 10,
+        local_radius: int = 4,
+        metrics: ty.List = None,
+        *args,
+        **kwargs
+    ):
+        super().__init__(n, metrics, *args, **kwargs)
         self.local_radius = local_radius
 
         def generate_random_small_set() -> int:

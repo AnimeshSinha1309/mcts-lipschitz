@@ -47,16 +47,6 @@ class MCTSAgent:
             None for _ in range(num_actions)
         ]
         self.parent = parent
-        self.cached_evaluations: ty.Dict[int, float] = {}
-
-    def cached_evaluator(self, x: int) -> float:
-        """Caches results from evaluator so the redundant queries don't get sent in
-        :param x: The state to be evaluated
-        :return: The value of the evaluation
-        """
-        if x not in self.cached_evaluations:
-            self.cached_evaluations[x] = self.evaluator(x)
-        return self.cached_evaluations[x]
 
     def update_q(self, reward, index):
         """Updates the q-value for the state
@@ -90,7 +80,8 @@ class MCTSAgent:
         :param action_index: The action from current node which should lead to expansion
         :returns: The new node in the MCTS object
         """
-        next_state, next_reward = self.evaluator.step(self.value, action_index)
+        next_state = self.evaluator.step(self.value, action_index)
+        next_reward = self.evaluator(next_state) - self.evaluator(self.value)
         self.child_states[action_index] = MCTSAgent(
             num_actions=len(self.n_value),
             evaluator=self.evaluator,
@@ -106,7 +97,7 @@ class MCTSAgent:
         :param _num_rollouts: Number of times we need to rollout the tree
         :returns: mean across the R random rollouts.
         """
-        return self.cached_evaluator(self.value)
+        return self.evaluator(self.value)
 
     def backup(self, reward) -> None:
         """Backs-up the rewards at the terminal node into the tree
