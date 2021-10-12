@@ -13,7 +13,8 @@ if __name__ == "__main__":
     metrics = [FunctionCallCounter()]
     for df in [LocalEffectsDataset(13, 4, metrics), SubsetAdditionDataset(13, metrics)]:
         print(
-            f"Evaluating on {df.__class__.__name__}"
+            f"--------------{len(df.__class__.__name__) * '-'}\n"
+            f"Evaluating on {df.__class__.__name__}\n"
             f"--------------{len(df.__class__.__name__) * '-'}"
         )
         for cls in [BiasingSamplerAgent, MCTSAgent, RandomAgent, FullSearchAgent]:
