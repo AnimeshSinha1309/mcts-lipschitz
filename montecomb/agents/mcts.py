@@ -11,10 +11,10 @@ from ..dataset.meta_dataset import MetaDataset
 class MCTSAgent:
     """Monte Carlo Tree Search object for evaluating the combination of moves"""
 
-    _HYPER_PARAMETER_NOISE_ALPHA = 0.2
-    _HYPER_PARAMETER_EXPLORATION = 1.0
-    _HYPER_PARAM_DISCOUNT_FACTOR = 0.95
-    _HYPER_PARAM_POLICY_TEMPERATURE = 0
+    HYPER_PARAMETER_NOISE_ALPHA = 0.2
+    HYPER_PARAMETER_EXPLORATION = 1.0
+    HYPER_PARAM_DISCOUNT_FACTOR = 0.95
+    HYPER_PARAM_POLICY_TEMPERATURE = 0
 
     def __init__(
         self,
@@ -65,7 +65,7 @@ class MCTSAgent:
         :returns: The selected id of the move, none if no move should be taken
         """
         n_visits = np.sum(self.n_value) + 1
-        uct = self.w_value / self.n_value + self._HYPER_PARAMETER_EXPLORATION * np.sqrt(
+        uct = self.w_value / self.n_value + self.HYPER_PARAMETER_EXPLORATION * np.sqrt(
             np.log(n_visits) / self.n_value
         )
         best_val = np.max(uct)
@@ -106,7 +106,7 @@ class MCTSAgent:
         """
         mcts_state = self
         while mcts_state.parent is not None:
-            reward = mcts_state.parent[2] + self._HYPER_PARAM_DISCOUNT_FACTOR * reward
+            reward = mcts_state.parent[2] + self.HYPER_PARAM_DISCOUNT_FACTOR * reward
             mcts_state.parent[0].update_q(reward, mcts_state.parent[1])
             mcts_state = mcts_state.parent[0]
 

@@ -22,3 +22,4 @@ class FunctionCallCounter:
     def reset(self):
         """Reset the counter back to 0"""
         self._count = 0
+        self._uniques.clear()

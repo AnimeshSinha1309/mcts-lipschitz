@@ -2,7 +2,7 @@ program: "sweeps/mcts_grid_sweep.py"
 method: grid
 metric:
   goal: maximize
-  name: reward
+  name: "reward"
 parameters:
   mcts_discount_factor:
     values: [1.0, 0.99, 0.95, 0.90, 0.80, 0.50, 0.20]
