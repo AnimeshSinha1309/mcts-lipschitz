@@ -22,7 +22,7 @@ class MCTSAgent:
         evaluator: MetaDataset,
         value: int = 0,
         parent: ty.Optional[ty.Tuple["MCTSAgent", int, float]] = None,
-    ):
+    ) -> None:
         """Initialize a new state object.
         This state object will have a visit counter and a mean reward estimate for
         each of it's children. Each state will contain an integer value representing
@@ -48,7 +48,7 @@ class MCTSAgent:
         ]
         self.parent = parent
 
-    def update_q(self, reward, index):
+    def update_q(self, reward: float, index: int) -> None:
         """Updates the q-value for the state
         n_value is the number of times a node visited
         q_value is the q function
@@ -91,10 +91,9 @@ class MCTSAgent:
         mcts_state = self.child_states[action_index]
         return ty.cast(MCTSAgent, mcts_state)
 
-    def rollout(self, _num_rollouts=0):
+    def rollout(self):
         """Performs a random rollout
         The total reward in each rollout is computed.
-        :param _num_rollouts: Number of times we need to rollout the tree
         :returns: mean across the R random rollouts.
         """
         return self.evaluator(self.value)

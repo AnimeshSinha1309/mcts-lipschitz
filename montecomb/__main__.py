@@ -1,3 +1,6 @@
+"""The main script that tests all agents against the different datasets."""
+
+
 import time
 
 from .dataset.subset_additions import SubsetAdditionDataset

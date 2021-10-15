@@ -1,4 +1,5 @@
 """Random Agent that just tries out all actions and takes the best one"""
+
 import tqdm.auto as tqdm
 
 from ..dataset.meta_dataset import MetaDataset
@@ -11,7 +12,7 @@ class FullSearchAgent:
         self,
         num_actions: int,
         evaluator: MetaDataset,
-    ):
+    ) -> None:
         """Initialize a new full searcher object.
         This initializes an agent which will try out all the different
         states to try out and evaluate which states will be the best.
@@ -23,7 +24,7 @@ class FullSearchAgent:
         self.best_state: int = 0
         self.best_reward: float = 0.0
 
-    def search(self, _n_trials) -> None:
+    def search(self, _n_trials: int = 0) -> None:
         """Perform the full search for best value
         :param _n_trials: Dummy variable
         """

@@ -1,4 +1,5 @@
 """The idea of implementing MCTS inspired from the Lipschitz bandit problem"""
+
 import typing as ty
 import numpy as np
 import tqdm.auto as tqdm
@@ -15,7 +16,7 @@ class BiasingSamplerAgent:
         self,
         num_actions: int,
         evaluator: MetaDataset,
-    ):
+    ) -> None:
         """Initialize a new lipschitz sampler object.
         This maintains the mean rewards of all the clusters and their variances,
         activates and eliminates while performing adaptive discretization and
